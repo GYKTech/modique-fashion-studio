@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODIQUE | Contemporary Fashion & Apparel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#b87d4b',
+                            600: '#9e673a',
+                            900: '#2d231e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile menu button -->
+                <div class="flex items-center lg:hidden">
+                    <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-100 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Brand Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="switchTab('home')">
+                    <span class="text-2xl sm:text-3xl font-bold tracking-widest text-stone-900 uppercase font-serif">MODIQUE</span>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex space-x-8">
+                    <button onclick="switchTab('home')" class="nav-link text-stone-700 hover:text-brand-600 font-medium text-sm tracking-wide transition border-b-2 border-brand-500 pb-1" data-tab="home">HOME</button>
+                    <button onclick="switchTab('catalog')" class="nav-link text-stone-500 hover:text-brand-600 font-medium text-sm tracking-wide transition pb-1" data-tab="catalog">CATALOG</button>
+                    <button onclick="switchTab('tracking')" class="nav-link text-stone-500 hover:text-brand-600 font-medium text-sm tracking-wide transition pb-1" data-tab="tracking">ORDER TRACKING</button>
+                    <button onclick="openSizeGuideModal()" class="text-stone-500 hover:text-brand-600 font-medium text-sm tracking-wide transition pb-1">SIZE GUIDE</button>
+                </nav>
+
+                <!-- Utility Icons -->
+                <div class="flex items-center space-x-4 sm:space-x-6">
+                    <button onclick="switchTab('wishlist')" class="relative p-2 text-stone-700 hover:text-brand-600 transition" title="Wishlist">
+                        <i class="fa-regular fa-heart text-xl"></i>
+                        <span id="wishlist-badge" class="absolute top-0 right-0 bg-brand-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                    <button onclick="toggleCartDrawer()" class="relative p-2 text-stone-700 hover:text-brand-600 transition" title="Shopping Cart">
+                        <i class="fa-bag-shopping fa-solid text-xl"></i>
+                        <span id="cart-badge" class="absolute top-0 right-0 bg-stone-900 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded-lg text-stone-800 font-medium hover:bg-stone-100">Home</button>
+            <button onclick="switchTab('catalog'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded-lg text-stone-800 font-medium hover:bg-stone-100">Catalog</button>
+            <button onclick="switchTab('tracking'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded-lg text-stone-800 font-medium hover:bg-stone-100">Order Tracking</button>
+            <button onclick="openSizeGuideModal(); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded-lg text-stone-800 font-medium hover:bg-stone-100">Size Guide</button>
+        </div>
+    </header>
+
+    <main class="min-h-screen pb-24">
+
+        <!-- TAB: HOME -->
+        <div id="tab-home" class="tab-content">
+            <!-- Hero Section -->
+            <section class="relative bg-stone-900 text-white overflow-hidden">
+                <div class="absolute inset-0 opacity-45">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=1920" onerror="this.src='https://placehold.co/1920x1080/2d231e/ffffff?text=Modique+Hero'" alt="Hero background" class="w-full h-full object-cover">
+                </div>
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 sm:py-36 lg:py-48 flex flex-col items-start justify-center">
+                    <span class="bg-brand-500 text-white text-xs uppercase px-3 py-1 rounded-full font-semibold tracking-widest mb-4">Autumn / Winter 2026</span>
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight max-w-2xl leading-tight mb-6">
+                        Refined Elegance For Everyday Life.
+                    </h1>
+                    <p class="text-stone-300 text-lg sm:text-xl max-w-lg mb-8 font-light">
+                        Discover sustainable luxury tailoring, effortless silhouettes, and timeless essentials crafted for modern wardrobes.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <button onclick="switchTab('catalog')" class="bg-white text-stone-900 font-semibold px-8 py-4 rounded-xl shadow-lg hover:bg-stone-100 transition text-center">
+                            Explore Collection
+                        </button>
+                        <button onclick="openSizeGuideModal()" class="border border-white/40 text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 transition text-center">
+                            View Size Guide
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Categories Grid -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center max-w-xl mx-auto mb-12">
+                    <h2 class="text-3xl font-serif font-bold text-stone-900 mb-3">Curated Categories</h2>
+                    <p class="text-stone-600">Explore our signature lines tailored for supreme comfort and standout style.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div onclick="filterByCategory('Outerwear')" class="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-md">
+                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80&w=800" onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Outerwear'" alt="Outerwear" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                            <span class="text-xs uppercase tracking-widest text-brand-400 font-semibold mb-1">Collection</span>
+                            <h3 class="text-2xl font-serif font-bold text-white">Outerwear & Coats</h3>
+                        </div>
+                    </div>
+                    <div onclick="filterByCategory('Dresses')" class="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-md">
+                        <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&q=80&w=800" onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Dresses'" alt="Dresses" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                            <span class="text-xs uppercase tracking-widest text-brand-400 font-semibold mb-1">Collection</span>
+                            <h3 class="text-2xl font-serif font-bold text-white">Evening & Midi Dresses</h3>
+                        </div>
+                    </div>
+                    <div onclick="filterByCategory('Trousers')" class="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-md">
+                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800" onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Trousers'" alt="Trousers" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                            <span class="text-xs uppercase tracking-widest text-brand-400 font-semibold mb-1">Collection</span>
+                            <h3 class="text-2xl font-serif font-bold text-white">Tailored Trousers</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trending Highlights -->
+            <section class="bg-stone-100 py-20 border-y border-stone-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                        <div>
+                            <span class="text-brand-600 font-semibold uppercase tracking-wider text-sm">Most Popular</span>
+                            <h2 class="text-3xl font-serif font-bold text-stone-900 mt-1">Trending This Week</h2>
+                        </div>
+                        <button onclick="switchTab('catalog')" class="mt-4 md:mt-0 text-stone-900 font-semibold hover:text-brand-600 transition flex items-center gap-2">
+                            View All Products <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </button>
+                    </div>
+                    <div id="home-trending-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB: CATALOG -->
+        <div id="tab-catalog" class="tab-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="mb-8">
+                <h1 class="text-3xl sm:text-4xl font-serif font-bold text-stone-900">Catalog & Products</h1>
+                <p class="text-stone-600 mt-1">Browse our complete inventory of premium apparel and accessories.</p>
+            </div>
+
+            <!-- Filters & Search Toolbar -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8 flex flex-col lg:flex-row gap-4 items-center justify-between">
+                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                    <!-- Search Input -->
+                    <div class="relative flex-grow sm:flex-grow-0 sm:w-80">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="catalog-search" oninput="handleCatalogFilter()" placeholder="Search products, colors..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm outline-none">
+                    </div>
+                    <!-- Category Select -->
+                    <select id="catalog-category-filter" onchange="handleCatalogFilter()" class="py-2.5 px-4 rounded-xl border border-stone-300 focus:ring-2 focus:ring-brand-500 text-sm bg-white outline-none">
+                        <option value="all">All Categories</option>
+                        <option value="Outerwear">Outerwear</option>
+                        <option value="Dresses">Dresses</option>
+                        <option value="Trousers">Trousers</option>
+                        <option value="Knitwear">Knitwear</option>
+                    </select>
+                </div>
+                <!-- Sort Select -->
+                <div class="flex items-center gap-3 w-full lg:w-auto justify-end">
+                    <span class="text-sm text-stone-500 whitespace-nowrap">Sort by:</span>
+                    <select id="catalog-sort" onchange="handleCatalogFilter()" class="py-2.5 px-4 rounded-xl border border-stone-300 focus:ring-2 focus:ring-brand-500 text-sm bg-white outline-none">
+                        <option value="featured">Featured</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="catalog-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Populated dynamically -->
+            </div>
+            <div id="catalog-empty-state" class="hidden text-center py-20">
+                <i class="fa-regular fa-face-frown text-4xl text-stone-400 mb-3"></i>
+                <h3 class="text-xl font-semibold text-stone-800">No products found</h3>
+                <p class="text-stone-500 mt-1">Try adjusting your search or category filters.</p>
+            </div>
+        </div>
+
+        <!-- TAB: WISHLIST -->
+        <div id="tab-wishlist" class="tab-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="mb-8">
+                <h1 class="text-3xl font-serif font-bold text-stone-900">My Wishlist</h1>
+                <p class="text-stone-600 mt-1">Items you've saved for later.</p>
+            </div>
+            <div id="wishlist-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Populated dynamically -->
+            </div>
+            <div id="wishlist-empty" class="hidden text-center py-24 bg-white rounded-2xl border border-stone-200">
+                <i class="fa-regular fa-heart text-5xl text-stone-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-stone-800">Your wishlist is empty</h3>
+                <p class="text-stone-500 mt-1 mb-6">Click the heart icon on any product to save it here.</p>
+                <button onclick="switchTab('catalog')" class="bg-stone-900 text-white font-semibold px-6 py-3 rounded-xl hover:bg-stone-800 transition">
+                    Explore Catalog
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB: ORDER TRACKING -->
+        <div id="tab-tracking" class="tab-content hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl sm:text-4xl font-serif font-bold text-stone-900">Order Tracking</h1>
+                <p class="text-stone-600 mt-2">Enter your order ID below to check live shipping updates.</p>
+            </div>
+
+            <!-- Search box -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="tracking-input" placeholder="e.g. MOD-94821" class="flex-grow py-3 px-4 rounded-xl border border-stone-300 focus:ring-2 focus:ring-brand-500 uppercase font-mono text-sm outline-none">
+                    <button onclick="trackOrder()" class="bg-stone-900 text-white font-semibold px-8 py-3 rounded-xl hover:bg-stone-800 transition">
+                        Track Order
+                    </button>
+                </div>
+                <div class="mt-4 flex gap-2 flex-wrap items-center">
+                    <span class="text-xs text-stone-500">Quick test IDs:</span>
+                    <button onclick="setQuickTrackId('MOD-94821')" class="text-xs bg-stone-100 hover:bg-stone-200 px-2.5 py-1 rounded-md font-mono text-stone-700">MOD-94821</button>
+                    <button onclick="setQuickTrackId('MOD-88320')" class="text-xs bg-stone-100 hover:bg-stone-200 px-2.5 py-1 rounded-md font-mono text-stone-700">MOD-88320</button>
+                </div>
+            </div>
+
+            <!-- Tracking Result Container -->
+            <div id="tracking-result" class="hidden bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 animate-fade-in">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+    </main>
+
+    <div id="product-modal" class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-fade-in">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-700 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="product-modal-content" class="p-6 sm:p-10">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <div id="size-guide-modal" class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 sm:p-10 animate-fade-in">
+            <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 w-10 h-10 bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-700 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h2 class="text-2xl font-serif font-bold text-stone-900 mb-2">Size & Fit Guide</h2>
+            <p class="text-stone-600 text-sm mb-6">All measurements are in inches. Use this guide to find your optimal fit.</p>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-semibold text-stone-800 mb-3">Women's Apparel Sizing</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-stone-100 text-stone-700">
+                                    <th class="p-3 font-semibold">Size</th>
+                                    <th class="p-3 font-semibold">Bust</th>
+                                    <th class="p-3 font-semibold">Waist</th>
+                                    <th class="p-3 font-semibold">Hips</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-200 text-stone-600">
+                                <tr><td class="p-3 font-medium">XS (2)</td><td class="p-3">32 - 33"</td><td class="p-3">24 - 25"</td><td class="p-3">34 - 35"</td></tr>
+                                <tr><td class="p-3 font-medium">S (4-6)</td><td class="p-3">34 - 35"</td><td class="p-3">26 - 27"</td><td class="p-3">36 - 37"</td></tr>
+                                <tr><td class="p-3 font-medium">M (8-10)</td><td class="p-3">36 - 37"</td><td class="p-3">28 - 29"</td><td class="p-3">38 - 39"</td></tr>
+                                <tr><td class="p-3 font-medium">L (12-14)</td><td class="p-3">38.5 - 40"</td><td class="p-3">30.5 - 32"</td><td class="p-3">40.5 - 42"</td></tr>
+                                <tr><td class="p-3 font-medium">XL (16)</td><td class="p-3">41.5"</td><td class="p-3">33.5"</td><td class="p-3">43.5"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-brand-50 p-4 rounded-xl border border-brand-100 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-info text-brand-600 mt-1"></i>
+                    <p class="text-xs text-stone-700">
+                        <strong class="font-semibold">Fitting Tip:</strong> If you are between two sizes, we recommend sizing up for a relaxed contemporary drape or sizing down for a fitted silhouette.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkout-modal" class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 sm:p-10 animate-fade-in">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 w-10 h-10 bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-700 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h2 class="text-2xl font-serif font-bold text-stone-900 mb-2">Secure Checkout</h2>
+            <p class="text-stone-600 text-sm mb-6">Complete your order details below.</p>
+
+            <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">Full Name</label>
+                    <input type="text" required placeholder="Jane Doe" class="w-full p-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">Email Address</label>
+                    <input type="email" required placeholder="jane@example.com" class="w-full p-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">Shipping Address</label>
+                    <textarea required placeholder="123 Fashion Ave, Suite 4B, New York, NY" rows="3" class="w-full p-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-stone-900 text-white font-semibold py-4 rounded-xl hover:bg-stone-800 transition shadow-lg">
+                        Confirm & Pay Securely
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-stone-950/50 backdrop-blur-sm transition-opacity" onclick="toggleCartDrawer()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                <div class="flex items-center justify-between p-6 border-b border-stone-200">
+                    <h2 class="text-xl font-serif font-bold text-stone-900">Shopping Cart</h2>
+                    <button onclick="toggleCartDrawer()" class="p-2 text-stone-500 hover:text-stone-800 rounded-lg">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                <!-- Cart items list -->
+                <div id="cart-items-container" class="flex-grow overflow-y-auto p-6 space-y-4 divide-y divide-stone-100">
+                    <!-- Populated dynamically -->
+                </div>
+                <!-- Cart footer -->
+                <div class="border-t border-stone-200 p-6 bg-stone-50">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-stone-600 font-medium">Subtotal</span>
+                        <span id="cart-subtotal" class="text-xl font-bold text-stone-900">$0.00</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mb-4">Shipping & taxes calculated at checkout.</p>
+                    <button onclick="openCheckoutModal()" id="checkout-btn" class="w-full bg-stone-900 text-white font-semibold py-4 rounded-xl hover:bg-stone-800 transition shadow-md flex items-center justify-center gap-2">
+                        Proceed to Checkout <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-stone-900 text-stone-400 py-16 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div>
+                <span class="text-2xl font-bold tracking-widest text-white uppercase font-serif">MODIQUE</span>
+                <p class="mt-4 text-sm leading-relaxed text-stone-400">
+                    Elevating modern style with sustainable fabrics, precise tailoring, and timeless aesthetic codes.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><button onclick="switchTab('catalog')" class="hover:text-white transition">Catalog</button></li>
+                    <li><button onclick="openSizeGuideModal()" class="hover:text-white transition">Size Guide</button></li>
+                    <li><button onclick="switchTab('tracking')" class="hover:text-white transition">Order Tracking</button></li>
+                    <li><button onclick="switchTab('wishlist')" class="hover:text-white transition">My Wishlist</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Customer Care</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition">Shipping & Delivery</a></li>
+                    <li><a href="#" class="hover:text-white transition">Returns & Exchanges</a></li>
+                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition">Contact Support</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Newsletter</h4>
+                <p class="text-sm mb-4">Subscribe to receive private sales, new arrivals, and style editorials.</p>
+                <form onsubmit="handleNewsletter(event)" class="flex gap-2">
+                    <input type="email" required placeholder="Your email address" class="bg-stone-800 border border-stone-700 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-500 flex-grow">
+                    <button type="submit" class="bg-brand-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-brand-600 transition">Join</button>
+                </form>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-stone-800 text-xs text-center text-stone-500">
+            &copy; 2026 MODIQUE Fashion Studio. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Initial Product Database
+        const products = [
+            {
+                id: 1,
+                name: "Cashmere Blend Trench Coat",
+                category: "Outerwear",
+                price: 289.00,
+                rating: 4.8,
+                reviewsCount: 38,
+                image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80&w=800",
+                description: "Expertly tailored from a luxurious wool and cashmere blend. Features a double-breasted closure, storm flap, and adjustable waist belt.",
+                sizes: ["XS", "S", "M", "L"],
+                colors: ["Camel", "Black", "Ivory"]
+            },
+            {
+                id: 2,
+                name: "Silk Slip Midi Dress",
+                category: "Dresses",
+                price: 165.00,
+                rating: 4.9,
+                reviewsCount: 52,
+                image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&q=80&w=800",
+                description: "Crafted from 100% mulberry silk with a liquid drape. Features delicate adjustable straps and a flattering bias cut.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Emerald", "Champagne", "Noir"]
+            },
+            {
+                id: 3,
+                name: "Pleated High-Waist Trousers",
+                category: "Trousers",
+                price: 120.00,
+                rating: 4.6,
+                reviewsCount: 24,
+                image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800",
+                description: "Structured wide-leg trousers designed with crisp front pleats and a high-rise waist for an elongated silhouette.",
+                sizes: ["XS", "S", "M", "L"],
+                colors: ["Charcoal", "Cream", "Navy"]
+            },
+            {
+                id: 4,
+                name: "Merino Wool Turtleneck Sweater",
+                category: "Knitwear",
+                price: 140.00,
+                rating: 4.7,
+                reviewsCount: 41,
+                image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=800",
+                description: "Extremely soft extra-fine merino wool sweater. Breathable yet insulating, perfect for layering during cooler seasons.",
+                sizes: ["S", "M", "L"],
+                colors: ["Oatmeal", "Black", "Burgundy"]
+            },
+            {
+                id: 5,
+                name: "Structured Tailored Blazer",
+                category: "Outerwear",
+                price: 210.00,
+                rating: 4.9,
+                reviewsCount: 19,
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800",
+                description: "Sharp oversized blazer with padded shoulders and horn buttons. Ideal for pairing with denim or matching trousers.",
+                sizes: ["XS", "S", "M", "L"],
+                colors: ["Black", "Houndstooth", "Taupe"]
+            },
+            {
+                id: 6,
+                name: "Linen Wrap Summer Dress",
+                category: "Dresses",
+                price: 135.00,
+                rating: 4.5,
+                reviewsCount: 31,
+                image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=800",
+                description: "Breathable organic linen wrap dress featuring short flutter sleeves and a self-tie waist sash.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Terracotta", "White", "Olive"]
+            },
+            {
+                id: 7,
+                name: "Relaxed Fit Cotton Chinos",
+                category: "Trousers",
+                price: 95.00,
+                rating: 4.4,
+                reviewsCount: 15,
+                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=800",
+                description: "Everyday luxury chinos made from garment-dyed cotton twill with a comfortable mid-rise fit.",
+                sizes: ["XS", "S", "M", "L", "XL"],
+                colors: ["Sand", "Olive", "Navy"]
+            },
+            {
+                id: 8,
+                name: "Chunky Ribbed Cardigan",
+                category: "Knitwear",
+                price: 155.00,
+                rating: 4.8,
+                reviewsCount: 29,
+                image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&q=80&w=800",
+                description: "Cozy cardigan featuring tortoiseshell buttons and deep patch pockets. A staple layering piece.",
+                sizes: ["S", "M", "L"],
+                colors: ["Cream", "Grey", "Camel"]
+            }
+        ];
+
+        // Sample Customer Reviews Database
+        const reviewsDatabase = {
+            1: [
+                { user: "Eleanor Vance", rating: 5, date: "May 12, 2026", comment: "The quality of the cashmere blend is exceptional. Received countless compliments on day one!" },
+                { user: "Marcus Chen", rating: 4, date: "Apr 28, 2026", comment: "Very stylish coat. Fits true to size, though slightly heavy for mild spring days." }
+            ],
+            2: [
+                { user: "Sophia Loren", rating: 5, date: "May 02, 2026", comment: "Absolute perfection. The silk drapes so smoothly and looks high-end." }
+            ]
+        };
+
+        // Sample Orders for Tracking
+        const mockOrders = {
+            "MOD-94821": {
+                id: "MOD-94821",
+                item: "Cashmere Blend Trench Coat (Camel, M)",
+                date: "August 12, 2026",
+                status: "In Transit",
+                steps: [
+                    { title: "Order Confirmed", desc: "We've received your payment and order details.", done: true },
+                    { title: "Packaging & Quality Check", desc: "Item inspected and securely packed in our studio.", done: true },
+                    { title: "In Transit", desc: "Carrier picked up package. Out for local delivery.", done: true },
+                    { title: "Delivered", desc: "Estimated delivery by August 18.", done: false }
+                ]
+            },
+            "MOD-88320": {
+                id: "MOD-88320",
+                item: "Silk Slip Midi Dress (Emerald, S)",
+                date: "August 10, 2026",
+                status: "Delivered",
+                steps: [
+                    { title: "Order Confirmed", desc: "We've received your payment and order details.", done: true },
+                    { title: "Packaging & Quality Check", desc: "Item inspected and securely packed in our studio.", done: true },
+                    { title: "In Transit", desc: "Carrier picked up package.", done: true },
+                    { title: "Delivered", desc: "Delivered on August 14.", done: true }
+                ]
+            }
+        };
+
+        // Application State
+        let cart = [];
+        let wishlist = [];
+        let currentTab = 'home';
+
+        // Initialization on Load
+        window.onload = function() {
+            renderHomeTrending();
+            renderCatalog();
+            renderWishlist();
+            updateBadges();
+        };
+
+        // Tab Navigation Controller
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Update header underlines if applicable
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.getAttribute('data-tab') === tabId) {
+                    link.classList.add('text-brand-600', 'border-b-2', 'border-brand-500');
+                    link.classList.remove('text-stone-500');
+                } else {
+                    link.classList.remove('text-brand-600', 'border-b-2', 'border-brand-500');
+                    link.classList.add('text-stone-500');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Render Home Trending Grid
+        function renderHomeTrending() {
+            const container = document.getElementById('home-trending-grid');
+            const trending = products.slice(0, 4);
+            container.innerHTML = trending.map(p => createProductCardHTML(p)).join('');
+        }
+
+        // Render Catalog Grid with Filtering & Sorting
+        function renderCatalog() {
+            const searchVal = document.getElementById('catalog-search').value.toLowerCase();
+            const catVal = document.getElementById('catalog-category-filter').value;
+            const sortVal = document.getElementById('catalog-sort').value;
+
+            let filtered = products.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(searchVal) || p.description.toLowerCase().includes(searchVal);
+                const matchCat = catVal === 'all' || p.category === catVal;
+                return matchSearch && matchCat;
+            });
+
+            // Sorting
+            if(sortVal === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+            if(sortVal === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+            if(sortVal === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+
+            const grid = document.getElementById('catalog-product-grid');
+            const emptyState = document.getElementById('catalog-empty-state');
+
+            if(filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.innerHTML = filtered.map(p => createProductCardHTML(p)).join('');
+            }
+        }
+
+        function handleCatalogFilter() {
+            renderCatalog();
+        }
+
+        function filterByCategory(catName) {
+            switchTab('catalog');
+            document.getElementById('catalog-category-filter').value = catName;
+            renderCatalog();
+        }
+
+        // Product Card HTML Template Generator
+        function createProductCardHTML(p) {
+            const isWishlisted = wishlist.includes(p.id);
+            return `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-stone-200 flex flex-col group">
+                    <div class="relative h-80 overflow-hidden bg-stone-100 cursor-pointer" onclick="openProductModal(${p.id})">
+                        <img src="${p.image}" onerror="this.src='https://placehold.co/600x800/e2e8f0/475569?text=Product'" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" class="absolute top-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-700 hover:text-brand-600 shadow transition">
+                            <i class="${isWishlisted ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart"></i>
+                        </button>
+                        <span class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-stone-800">${p.category}</span>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-stone-500 mb-1">
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-star text-amber-400"></i> ${p.rating} (${p.reviewsCount})</span>
+                            </div>
+                            <h3 onclick="openProductModal(${p.id})" class="font-serif font-bold text-stone-900 text-lg cursor-pointer hover:text-brand-600 transition truncate">${p.name}</h3>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-lg font-bold text-stone-900">$${p.price.toFixed(2)}</span>
+                            <button onclick="openProductModal(${p.id})" class="bg-stone-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:bg-stone-800 transition">
+                                Quick View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Wishlist Handler
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            if(index > -1) {
+                wishlist.splice(index, 1);
+                showToast("Removed from wishlist");
+            } else {
+                wishlist.push(productId);
+                showToast("Added to wishlist successfully!");
+            }
+            updateBadges();
+            renderCatalog();
+            renderHomeTrending();
+            renderWishlist();
+        }
+
+        function renderWishlist() {
+            const grid = document.getElementById('wishlist-grid');
+            const empty = document.getElementById('wishlist-empty');
+
+            const wishlistedProducts = products.filter(p => wishlist.includes(p.id));
+
+            if(wishlistedProducts.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                grid.innerHTML = wishlistedProducts.map(p => createProductCardHTML(p)).join('');
+            }
+        }
+
+        // Product Modal & Customer Reviews
+        function openProductModal(productId) {
+            const p = products.find(item => item.id === productId);
+            if(!p) return;
+
+            const modalContent = document.getElementById('product-modal-content');
+            const reviews = reviewsDatabase[p.id] || [];
+
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div class="rounded-2xl overflow-hidden bg-stone-100 h-96 md:h-[500px]">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex flex-col h-full justify-between">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-brand-600 font-semibold">${p.category}</span>
+                            <h1 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mt-1 mb-2">${p.name}</h1>
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="flex text-amber-400 text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                                </div>
+                                <span class="text-xs text-stone-500">${p.rating} (${p.reviewsCount} customer reviews)</span>
+                            </div>
+                            <div class="text-2xl font-bold text-stone-900 mb-4">$${p.price.toFixed(2)}</div>
+                            <p class="text-stone-600 text-sm leading-relaxed mb-6">${p.description}</p>
+
+                            <!-- Size Selector -->
+                            <div class="mb-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-xs font-semibold uppercase tracking-wider text-stone-700">Select Size</label>
+                                    <button onclick="openSizeGuideModal()" class="text-xs text-brand-600 hover:underline">Size Guide</button>
+                                </div>
+                                <div id="modal-sizes" class="flex gap-2">
+                                    ${p.sizes.map((s, idx) => `
+                                        <button onclick="selectModalSize('${s}')" class="size-btn px-4 py-2 rounded-xl border border-stone-300 text-sm font-medium hover:border-stone-900 transition ${idx === 0 ? 'bg-stone-900 text-white border-stone-900 selected-size' : 'bg-white text-stone-800'}">${s}</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 space-y-3">
+                            <button onclick="addToCartFromModal(${p.id})" class="w-full bg-stone-900 text-white font-semibold py-4 rounded-xl hover:bg-stone-800 transition shadow-md flex items-center justify-center gap-2">
+                                <i class="fa-bag-shopping fa-solid"></i> Add to Shopping Bag
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Reviews Section -->
+                <div class="mt-12 pt-8 border-t border-stone-200">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-serif font-bold text-stone-900">Customer Reviews</h3>
+                        <button onclick="openAddReviewForm(${p.id})" class="text-xs bg-stone-100 hover:bg-stone-200 font-semibold px-4 py-2 rounded-xl text-stone-800 transition">Write a Review</button>
+                    </div>
+                    
+                    <!-- Review Submission Form (Hidden initially) -->
+                    <div id="review-form-container" class="hidden mb-8 bg-stone-50 p-6 rounded-2xl border border-stone-200">
+                        <h4 class="font-semibold text-stone-800 mb-3 text-sm">Add Your Review</h4>
+                        <form onsubmit="submitReview(event, ${p.id})" class="space-y-3">
+                            <input type="text" id="reviewer-name" required placeholder="Your Name" class="w-full p-2.5 rounded-xl border border-stone-300 text-sm bg-white">
+                            <select id="reviewer-rating" class="w-full p-2.5 rounded-xl border border-stone-300 text-sm bg-white">
+                                <option value="5">5 Stars - Outstanding Quality</option>
+                                <option value="4">4 Stars - Very Good</option>
+                                <option value="3">3 Stars - Average</option>
+                                <option value="2">2 Stars - Below Expectations</option>
+                                <option value="1">1 Star - Poor</option>
+                            </select>
+                            <textarea id="reviewer-comment" required placeholder="Write your review here..." rows="3" class="w-full p-2.5 rounded-xl border border-stone-300 text-sm bg-white"></textarea>
+                            <button type="submit" class="bg-brand-500 text-white px-5 py-2 rounded-xl text-xs font-semibold hover:bg-brand-600 transition">Post Review</button>
+                        </form>
+                    </div>
+
+                    <!-- Reviews List -->
+                    <div id="reviews-list" class="space-y-4">
+                        ${reviews.length === 0 ? '<p class="text-sm text-stone-500">No reviews yet. Be the first to share your experience!</p>' : reviews.map(r => `
+                            <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-semibold text-stone-800 text-sm">${r.user}</span>
+                                    <span class="text-xs text-stone-400">${r.date}</span>
+                                </div>
+                                <div class="flex text-amber-400 text-xs mb-2">
+                                    ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
+                                </div>
+                                <p class="text-xs text-stone-600">${r.comment}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        let selectedModalSize = null;
+        function selectModalSize(size) {
+            selectedModalSize = size;
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                if(btn.textContent.trim() === size) {
+                    btn.classList.add('bg-stone-900', 'text-white', 'border-stone-900');
+                    btn.classList.remove('bg-white', 'text-stone-800');
+                } else {
+                    btn.classList.remove('bg-stone-900', 'text-white', 'border-stone-900');
+                    btn.classList.add('bg-white', 'text-stone-800');
+                }
+            });
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            selectedModalSize = null;
+        }
+
+        function openAddReviewForm(productId) {
+            const form = document.getElementById('review-form-container');
+            form.classList.toggle('hidden');
+        }
+
+        function submitReview(e, productId) {
+            e.preventDefault();
+            const name = document.getElementById('reviewer-name').value;
+            const rating = parseInt(document.getElementById('reviewer-rating').value);
+            const comment = document.getElementById('reviewer-comment').value;
+
+            if(!reviewsDatabase[productId]) reviewsDatabase[productId] = [];
+            reviewsDatabase[productId].unshift({
+                user: name,
+                rating: rating,
+                date: "Today",
+                comment: comment
+            });
+
+            // Update product reviews count and rating roughly
+            const p = products.find(item => item.id === productId);
+            if(p) {
+                p.reviewsCount += 1;
+            }
+
+            showToast("Review submitted successfully!");
+            openProductModal(productId); // Refresh modal
+        }
+
+        // Shopping Cart Management
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            drawer.classList.toggle('hidden');
+            if(!drawer.classList.contains('hidden')) {
+                renderCartItems();
+            }
+        }
+
+        function addToCartFromModal(productId) {
+            const p = products.find(item => item.id === productId);
+            const size = selectedModalSize || p.sizes[0];
+
+            const existing = cart.find(item => item.id === productId && item.size === size);
+            if(existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    image: p.image,
+                    size: size,
+                    quantity: 1
+                });
+            }
+
+            updateBadges();
+            closeProductModal();
+            toggleCartDrawer();
+            showToast("Added to shopping bag!");
+        }
+
+        function updateCartItemQuantity(productId, size, delta) {
+            const item = cart.find(i => i.id === productId && i.size === size);
+            if(item) {
+                item.quantity += delta;
+                if(item.quantity <= 0) {
+                    cart = cart.filter(i => !(i.id === productId && i.size === size));
+                }
+            }
+            renderCartItems();
+            updateBadges();
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16">
+                        <i class="fa-bag-shopping fa-solid text-4xl text-stone-300 mb-3"></i>
+                        <p class="text-stone-500 text-sm">Your shopping bag is empty.</p>
+                    </div>
+                `;
+                subtotalEl.textContent = '$0.00';
+                return;
+            }
+
+            let subtotal = 0;
+            container.innerHTML = cart.map(item => {
+                subtotal += item.price * item.quantity;
+                return `
+                    <div class="flex gap-4 py-4 items-center">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-xl bg-stone-100 flex-shrink-0">
+                        <div class="flex-grow">
+                            <h4 class="font-serif font-bold text-stone-900 text-sm">${item.name}</h4>
+                            <p class="text-xs text-stone-500 mt-0.5">Size: <span class="font-semibold text-stone-700">${item.size}</span></p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-stone-900 text-sm">$${item.price.toFixed(2)}</span>
+                                <div class="flex items-center gap-2 border border-stone-200 rounded-lg px-2 py-1">
+                                    <button onclick="updateCartItemQuantity(${item.id}, '${item.size}', -1)" class="text-stone-500 hover:text-stone-900 text-xs"><i class="fa-solid fa-minus"></i></button>
+                                    <span class="text-xs font-semibold text-stone-800">${item.quantity}</span>
+                                    <button onclick="updateCartItemQuantity(${item.id}, '${item.size}', 1)" class="text-stone-500 hover:text-stone-900 text-xs"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        function updateBadges() {
+            const cartBadge = document.getElementById('cart-badge');
+            const wishlistBadge = document.getElementById('wishlist-badge');
+
+            const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if(totalCartItems > 0) {
+                cartBadge.textContent = totalCartItems;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+
+            if(wishlist.length > 0) {
+                wishlistBadge.textContent = wishlist.length;
+                wishlistBadge.classList.remove('hidden');
+            } else {
+                wishlistBadge.classList.add('hidden');
+            }
+        }
+
+        // Checkout Process
+        function openCheckoutModal() {
+            if(cart.length === 0) {
+                showToast("Your cart is empty!");
+                return;
+            }
+            toggleCartDrawer();
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            // Generate random order ID
+            const newOrderId = 'MOD-' + Math.floor(10000 + Math.random() * 90000);
+            const firstItemName = cart[0].name;
+
+            mockOrders[newOrderId] = {
+                id: newOrderId,
+                item: `${firstItemName} (${cart.length} items total)`,
+                date: "Today",
+                status: "Order Confirmed",
+                steps: [
+                    { title: "Order Confirmed", desc: "We've received your payment and order details.", done: true },
+                    { title: "Packaging & Quality Check", desc: "Item currently being prepared in our studio.", done: false },
+                    { title: "In Transit", desc: "Pending courier pickup.", done: false },
+                    { title: "Delivered", desc: "Estimated delivery in 3-5 business days.", done: false }
+                ]
+            };
+
+            cart = [];
+            updateBadges();
+            closeCheckoutModal();
+            
+            // Switch to tracking tab and preset ID
+            switchTab('tracking');
+            document.getElementById('tracking-input').value = newOrderId;
+            trackOrder();
+            showToast(`Order placed successfully! ID: ${newOrderId}`);
+        }
+
+        // Order Tracking Logic
+        function setQuickTrackId(id) {
+            document.getElementById('tracking-input').value = id;
+            trackOrder();
+        }
+
+        function trackOrder() {
+            const queryId = document.getElementById('tracking-input').value.trim().toUpperCase();
+            const resultContainer = document.getElementById('tracking-result');
+
+            if(!queryId) {
+                showToast("Please enter a valid order ID");
+                return;
+            }
+
+            const order = mockOrders[queryId];
+            if(!order) {
+                resultContainer.classList.remove('hidden');
+                resultContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl text-amber-500 mb-2"></i>
+                        <h3 class="text-lg font-bold text-stone-900">Order Not Found</h3>
+                        <p class="text-stone-500 text-xs mt-1">No shipment record matches ID "${queryId}". Try MOD-94821 or MOD-88320.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultContainer.classList.remove('hidden');
+            resultContainer.innerHTML = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-stone-200 gap-4">
+                    <div>
+                        <span class="text-xs uppercase font-semibold text-brand-600 tracking-wider">Order Reference</span>
+                        <h3 class="text-xl font-bold font-mono text-stone-900">${order.id}</h3>
+                        <p class="text-xs text-stone-500 mt-1">Placed on ${order.date} &bull; <strong class="text-stone-800">${order.item}</strong></p>
+                    </div>
+                    <span class="px-4 py-1.5 rounded-full text-xs font-semibold ${order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' : 'bg-brand-100 text-brand-800'}">
+                        ${order.status}
+                    </span>
+                </div>
+
+                <!-- Timeline Steps -->
+                <div class="mt-8 space-y-6">
+                    ${order.steps.map((step, idx) => `
+                        <div class="flex items-start gap-4 relative">
+                            ${idx < order.steps.length - 1 ? '<div class="absolute left-4 top-8 w-0.5 h-12 bg-stone-200"></div>' : ''}
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${step.done ? 'bg-stone-900 text-white' : 'bg-stone-200 text-stone-500'} text-xs font-bold">
+                                ${step.done ? '<i class="fa-solid fa-check"></i>' : idx + 1}
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-stone-900 text-sm">${step.title}</h4>
+                                <p class="text-xs text-stone-500 mt-0.5">${step.desc}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Size Guide Modal Controller
+        function openSizeGuideModal() {
+            document.getElementById('size-guide-modal').classList.remove('hidden');
+        }
+        function closeSizeGuideModal() {
+            document.getElementById('size-guide-modal').classList.add('hidden');
+        }
+
+        // Newsletter Handler
+        function handleNewsletter(e) {
+            e.preventDefault();
+            showToast("Thank you for subscribing to MODIQUE!");
+            e.target.reset();
+        }
+
+        // Toast Notification System
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-stone-900 text-white px-5 py-3 rounded-xl shadow-xl text-xs font-medium animate-fade-in pointer-events-auto flex items-center gap-3';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-brand-400"></i> ${message}`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
